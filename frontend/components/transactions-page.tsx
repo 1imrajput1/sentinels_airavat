@@ -31,7 +31,7 @@ export function TransactionsPage() {
 
   return (
     <div className="flex min-h-screen bg-slate-50">
-      {/* Sidebar for desktop */}
+      {/* Sidebar for desktop
       <SidebarNav currentPath="/transactions" isMobile={false} />
 
       {/* Mobile sidebar */}

@@ -17,7 +17,7 @@ export function CommunityPage() {
 
   return (
     <div className="flex min-h-screen bg-slate-50">
-      {/* Sidebar for desktop */}
+      {/* Sidebar for desktop
       <SidebarNav currentPath="/community" isMobile={false} />
 
       {/* Mobile sidebar */}

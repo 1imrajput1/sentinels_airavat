@@ -20,7 +20,7 @@ export function ChallengesPage() {
 
   return (
     <div className="flex min-h-screen bg-slate-50">
-      {/* Sidebar for desktop */}
+      {/* Sidebar for desktop
       <SidebarNav currentPath="/challenges" isMobile={false} />
 
       {/* Mobile sidebar */}

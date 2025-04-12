@@ -3,10 +3,34 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FiUpload, FiTarget, FiTrendingUp, FiBarChart2, FiUsers, FiMessageSquare } from "react-icons/fi";
-import RumiChatbot from "@/components/RumiChatbot";
+import { isAuthenticated, getUserData } from "@/utils/auth";
 
 export default function Home() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState<any>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const authStatus = isAuthenticated();
+      setIsLoggedIn(authStatus);
+      if (authStatus) {
+        setUserData(getUserData());
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.push('/dashboard');
+    }
+  }, [isLoggedIn, router]);
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Hero Section */}
@@ -26,17 +50,19 @@ export default function Home() {
               <p className="text-xl text-gray-600 mb-8">
                 An AI-powered personal finance platform that helps you track, save, and grow your money with goals, rewards, and challenges.
               </p>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Link
-                  href="/signup"
-                  className="inline-flex items-center px-8 py-4 border border-transparent text-base font-medium rounded-md text-white bg-[#07a6ec] hover:bg-[#06a6ec] transition-colors"
+              {!isLoggedIn && (
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  Upload your bank statements, Get Instant Insights
-                </Link>
-              </motion.div>
+                  <Link
+                    href="/auth/signup"
+                    className="inline-flex items-center px-8 py-4 border border-transparent text-base font-medium rounded-md text-white bg-[#07a6ec] hover:bg-[#06a6ec] transition-colors"
+                  >
+                    Upload your bank statements, Get Instant Insights
+                  </Link>
+                </motion.div>
+              )}
             </motion.div>
 
             {/* Right Column - Animation */}
@@ -50,13 +76,29 @@ export default function Home() {
                 {/* Finance Graphics */}
                 <div className="absolute top-0 right-0 w-full h-full">
                   <Image
-                    src=""
+                    src="https://i.ibb.co/0jZ3YtL/finance-dashboard.png"
                     alt="Finance Dashboard"
                     width={600}
                     height={400}
                     className="w-full h-auto object-contain"
                   />
                 </div>
+                
+                {/* Rumi AI Companion - Bottom Right Corner */}
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                  className="absolute bottom-0 right-0"
+                >
+                  <Image
+                    src="https://i.ibb.co/LXxjhgkP/rumi1-happy.png"
+                    alt="Rumi AI Companion"
+                    width={150}
+                    height={150}
+                    className="w-32 h-32 object-contain"
+                  />
+                </motion.div>
               </div>
             </motion.div>
           </div>
@@ -349,9 +391,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-
-      {/* Add RumiChatbot at the bottom of the page */}
-      <RumiChatbot emotion="happy" />
     </main>
   );
 }
