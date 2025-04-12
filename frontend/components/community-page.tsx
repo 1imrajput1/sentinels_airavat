@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
-import { Award, Bell, ChevronRight, Crown, Menu, Search, Shield, Trophy, Users, X } from "lucide-react"
+import { useState, useEffect } from "react"
+import { Award, Bell, ChevronRight, Copy, Menu, Search, Shield, Share2, Users, X } from "lucide-react"
 import Image from "next/image"
+import { toast } from "sonner"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -10,11 +11,169 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { SidebarNav } from "@/components/sidebar-nav"
+import { Group, createGroup, getMyGroups, joinGroup, searchGroups, getGroup, contributeToGroup, leaveGroup, deleteGroup } from "@/utils/groups"
 
 export function CommunityPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [myGroups, setMyGroups] = useState<Group[]>([])
+  const [discoveredGroups, setDiscoveredGroups] = useState<Group[]>([])
+  const [isCreatingGroup, setIsCreatingGroup] = useState(false)
+  const [selectedGroup, setSelectedGroup] = useState<Group | null>(null)
+  const [contributionAmount, setContributionAmount] = useState("")
+  const [joinGroupKey, setJoinGroupKey] = useState("")
+  const [isJoiningGroup, setIsJoiningGroup] = useState(false)
+  const [newGroupData, setNewGroupData] = useState({
+    group_name: "",
+    description: "",
+    goal_amount: 0
+  })
+
+  useEffect(() => {
+    loadMyGroups()
+  }, [])
+
+  const loadMyGroups = async () => {
+    try {
+      const response = await getMyGroups()
+      if (response.success && response.groups) {
+        setMyGroups(response.groups)
+      }
+    } catch (error) {
+      toast.error("Failed to load your groups")
+    }
+  }
+
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) return
+    try {
+      const response = await searchGroups(searchQuery)
+      if (response.success && response.groups) {
+        setDiscoveredGroups(response.groups)
+      }
+    } catch (error) {
+      toast.error("Failed to search groups")
+    }
+  }
+
+  const handleCreateGroup = async () => {
+    if (!newGroupData.group_name || !newGroupData.goal_amount) {
+      toast.error("Group name and goal amount are required")
+      return
+    }
+
+    try {
+      const response = await createGroup(newGroupData)
+      if (response.success) {
+        toast.success("Group created successfully!")
+        setIsCreatingGroup(false)
+        loadMyGroups()
+      } else {
+        toast.error(response.message || "Failed to create group")
+      }
+    } catch (error) {
+      toast.error("Failed to create group")
+    }
+  }
+
+  const handleJoinGroup = async (groupKey: string) => {
+    try {
+      const response = await joinGroup(groupKey)
+      if (response.success) {
+        toast.success("Joined group successfully!")
+        setIsJoiningGroup(false)
+        setJoinGroupKey("")
+        loadMyGroups()
+      } else {
+        toast.error(response.message || "Failed to join group")
+      }
+    } catch (error) {
+      toast.error("Failed to join group")
+    }
+  }
+
+  const handleContribute = async (groupId: number) => {
+    const amount = parseFloat(contributionAmount)
+    if (isNaN(amount) || amount <= 0) {
+      toast.error("Please enter a valid contribution amount")
+      return
+    }
+
+    try {
+      const response = await contributeToGroup(groupId, amount)
+      if (response.success) {
+        toast.success("Contribution added successfully!")
+        setContributionAmount("")
+        if (selectedGroup) {
+          const updatedGroup = await getGroup(selectedGroup.group_id)
+          if (updatedGroup.success && updatedGroup.group) {
+            setSelectedGroup(updatedGroup.group)
+          }
+        }
+        loadMyGroups()
+      } else {
+        toast.error(response.message || "Failed to add contribution")
+      }
+    } catch (error) {
+      toast.error("Failed to add contribution")
+    }
+  }
+
+  const handleLeaveGroup = async (groupId: number) => {
+    try {
+      const response = await leaveGroup(groupId)
+      if (response.success) {
+        toast.success("Left group successfully!")
+        setSelectedGroup(null)
+        loadMyGroups()
+      } else {
+        toast.error(response.message || "Failed to leave group")
+      }
+    } catch (error) {
+      toast.error("Failed to leave group")
+    }
+  }
+
+  const handleDeleteGroup = async (groupId: number) => {
+    try {
+      const response = await deleteGroup(groupId)
+      if (response.success) {
+        toast.success("Group deleted successfully!")
+        setSelectedGroup(null)
+        loadMyGroups()
+      } else {
+        toast.error(response.message || "Failed to delete group")
+      }
+    } catch (error) {
+      toast.error("Failed to delete group")
+    }
+  }
+
+  const copyGroupKey = (key: string) => {
+    navigator.clipboard.writeText(key)
+    toast.success("Group key copied to clipboard!")
+  }
+
+  const shareGroup = (key: string) => {
+    const shareUrl = `${window.location.origin}/community?join=${key}`
+    navigator.clipboard.writeText(shareUrl)
+    toast.success("Group link copied to clipboard!")
+  }
+
+  const handleViewDetails = async (group: Group) => {
+    try {
+      const response = await getGroup(group.group_id)
+      if (response.success && response.group) {
+        setSelectedGroup(response.group)
+      } else {
+        toast.error("Failed to load group details")
+      }
+    } catch (error) {
+      toast.error("Failed to load group details")
+    }
+  }
 
   return (
     <div className="flex min-h-screen bg-slate-50">
@@ -89,117 +248,88 @@ export function CommunityPage() {
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
-              <Input placeholder="Search financial circles..." className="pl-9" />
+              <Input 
+                placeholder="Search financial circles..." 
+                className="pl-9"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              />
             </div>
-            <Button className="bg-blue-600 hover:bg-blue-700">
-              <Users className="mr-2 h-4 w-4" />
-              Create New Circle
-            </Button>
+            <div className="flex gap-2">
+              <Dialog open={isJoiningGroup} onOpenChange={setIsJoiningGroup}>
+                <DialogTrigger asChild>
+                  <Button variant="outline">
+                    <Users className="mr-2 h-4 w-4" />
+                    Join Circle
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Join a Financial Circle</DialogTitle>
+                    <CardDescription>Enter the group key to join a circle</CardDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 py-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Group Key</label>
+                      <Input
+                        placeholder="Enter group key"
+                        value={joinGroupKey}
+                        onChange={(e) => setJoinGroupKey(e.target.value)}
+                      />
+                    </div>
+                    <Button className="w-full" onClick={() => handleJoinGroup(joinGroupKey)}>
+                      Join Circle
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+
+              <Dialog open={isCreatingGroup} onOpenChange={setIsCreatingGroup}>
+                <DialogTrigger asChild>
+                  <Button className="bg-blue-600 hover:bg-blue-700">
+                    <Users className="mr-2 h-4 w-4" />
+                    Create New Circle
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Create New Financial Circle</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 py-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Circle Name</label>
+                      <Input
+                        placeholder="Enter circle name"
+                        value={newGroupData.group_name}
+                        onChange={(e) => setNewGroupData({...newGroupData, group_name: e.target.value})}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Description</label>
+                      <Input
+                        placeholder="Enter description"
+                        value={newGroupData.description}
+                        onChange={(e) => setNewGroupData({...newGroupData, description: e.target.value})}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Goal Amount (₹)</label>
+                      <Input
+                        type="number"
+                        placeholder="Enter goal amount"
+                        value={newGroupData.goal_amount}
+                        onChange={(e) => setNewGroupData({...newGroupData, goal_amount: Number(e.target.value)})}
+                      />
+                    </div>
+                    <Button className="w-full" onClick={handleCreateGroup}>
+                      Create Circle
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
-
-          {/* Leaderboard */}
-          <Card className="mb-8">
-            <CardHeader className="pb-2">
-              <CardTitle>Global Leaderboard</CardTitle>
-              <CardDescription>See how you compare with others</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between rounded-lg bg-blue-50 border border-blue-200 p-3">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500 text-white font-bold">
-                      1
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-8 w-8 border-2 border-blue-300">
-                        <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
-                        <AvatarFallback>JD</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-medium">Jane Doe</p>
-                        <p className="text-xs text-slate-500">Saving Champion</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Crown className="h-5 w-5 text-yellow-500" />
-                    <span className="font-semibold">1,250 pts</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between rounded-lg bg-slate-50 border p-3">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-200 text-slate-700 font-bold">
-                      2
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
-                        <AvatarFallback>JS</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-medium">John Smith</p>
-                        <p className="text-xs text-slate-500">Budget Master</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Award className="h-5 w-5 text-slate-400" />
-                    <span className="font-semibold">1,120 pts</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between rounded-lg bg-slate-50 border p-3">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-200 text-slate-700 font-bold">
-                      3
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
-                        <AvatarFallback>AK</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-medium">Aisha Khan</p>
-                        <p className="text-xs text-slate-500">Debt Destroyer</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Award className="h-5 w-5 text-slate-400" />
-                    <span className="font-semibold">980 pts</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between rounded-lg bg-green-50 border border-green-200 p-3">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500 text-white font-bold">
-                      8
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-8 w-8 border-2 border-green-300">
-                        <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
-                        <AvatarFallback>RA</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-medium">Rahul Agarwal</p>
-                        <p className="text-xs text-slate-500">You</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Trophy className="h-5 w-5 text-green-500" />
-                    <span className="font-semibold">780 pts</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button variant="outline" className="w-full">
-                View Full Leaderboard
-              </Button>
-            </CardFooter>
-          </Card>
 
           {/* Financial Circles */}
           <Tabs defaultValue="my-circles" className="mt-8">
@@ -210,77 +340,44 @@ export function CommunityPage() {
             </TabsList>
             <TabsContent value="my-circles" className="mt-6">
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle>Family Finance</CardTitle>
-                    <CardDescription>5 members</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex -space-x-2 mb-4">
-                      {[1, 2, 3, 4, 5].map((i) => (
-                        <Avatar key={i} className="border-2 border-white">
-                          <AvatarImage src={`/placeholder.svg?height=32&width=32&text=${i}`} alt={`Member ${i}`} />
-                          <AvatarFallback>M{i}</AvatarFallback>
-                        </Avatar>
-                      ))}
-                    </div>
-                    <p className="text-sm text-slate-600 mb-4">
-                      A private circle for our family to track shared financial goals and expenses.
-                    </p>
-                    <div className="rounded-lg bg-slate-100 p-3">
-                      <p className="text-sm font-medium">Current Goal</p>
-                      <p className="text-xs text-slate-500 mb-2">Family vacation fund: ₹50,000</p>
-                      <div className="h-2 w-full rounded-full bg-slate-200">
-                        <div className="h-full w-[65%] rounded-full bg-blue-500"></div>
+                {myGroups.map((group) => (
+                  <Card key={group.group_id}>
+                    <CardHeader className="pb-2">
+                      <CardTitle>{group.group_name}</CardTitle>
+                      <CardDescription>{group.member_count} members</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-slate-600 mb-4">{group.description}</p>
+                      <div className="rounded-lg bg-slate-100 p-3">
+                        <p className="text-sm font-medium">Progress</p>
+                        <p className="text-xs text-slate-500 mb-2">
+                          ₹{group.total_contribution} of ₹{group.goal_amount}
+                        </p>
+                        <div className="h-2 w-full rounded-full bg-slate-200">
+                          <div 
+                            className={`h-full rounded-full ${
+                              group.goal_complete ? 'bg-green-500' : 'bg-blue-500'
+                            }`}
+                            style={{ width: `${group.progress_percentage}%` }}
+                          ></div>
+                        </div>
+                        <p className="mt-1 text-right text-xs text-slate-500">
+                          {group.progress_percentage}% complete
+                        </p>
                       </div>
-                      <p className="mt-1 text-right text-xs text-slate-500">65% complete</p>
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Button variant="outline" className="w-full">
-                      Enter Circle
-                      <ChevronRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </CardFooter>
-                </Card>
-
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle>Debt Crushers</CardTitle>
-                    <CardDescription>12 members</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex -space-x-2 mb-4">
-                      {[1, 2, 3].map((i) => (
-                        <Avatar key={i} className="border-2 border-white">
-                          <AvatarImage src={`/placeholder.svg?height=32&width=32&text=${i}`} alt={`Member ${i}`} />
-                          <AvatarFallback>D{i}</AvatarFallback>
-                        </Avatar>
-                      ))}
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-slate-100 text-xs font-medium">
-                        +9
-                      </div>
-                    </div>
-                    <p className="text-sm text-slate-600 mb-4">
-                      A supportive community focused on eliminating debt and achieving financial freedom.
-                    </p>
-                    <div className="rounded-lg bg-slate-100 p-3">
-                      <p className="text-sm font-medium">Group Challenge</p>
-                      <p className="text-xs text-slate-500 mb-2">Reduce total debt by 5% this month</p>
-                      <div className="h-2 w-full rounded-full bg-slate-200">
-                        <div className="h-full w-[40%] rounded-full bg-green-500"></div>
-                      </div>
-                      <p className="mt-1 text-right text-xs text-slate-500">40% complete</p>
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Button variant="outline" className="w-full">
-                      Enter Circle
-                      <ChevronRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </CardFooter>
-                </Card>
-
+                    </CardContent>
+                    <CardFooter className="flex flex-col gap-2">
+                      <Button 
+                        variant="outline" 
+                        className="w-full"
+                        onClick={() => handleViewDetails(group)}
+                      >
+                        View Details
+                        <ChevronRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
                 <Card className="border-dashed border-slate-300 bg-slate-50">
                   <CardContent className="flex flex-col items-center justify-center p-6">
                     <div className="mb-4 rounded-full bg-slate-100 p-3">
@@ -290,69 +387,51 @@ export function CommunityPage() {
                     <p className="mb-4 text-center text-sm text-slate-500">
                       Connect with others who share your financial goals
                     </p>
-                    <Button variant="outline">Browse Circles</Button>
+                    <Button variant="outline" onClick={() => document.getElementById('discover-tab')?.click()}>
+                      Browse Circles
+                    </Button>
                   </CardContent>
                 </Card>
               </div>
             </TabsContent>
             <TabsContent value="discover" className="mt-6">
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle>First-Time Investors</CardTitle>
-                    <CardDescription>28 members</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-slate-600 mb-4">
-                      Learn the basics of investing with others who are just starting their investment journey.
-                    </p>
-                    <div className="flex items-center gap-2 text-sm text-slate-500">
-                      <Trophy className="h-4 w-4 text-blue-500" />
-                      <span>3 active challenges</span>
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700">Join Circle</Button>
-                  </CardFooter>
-                </Card>
-
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle>Budget Ninjas</CardTitle>
-                    <CardDescription>45 members</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-slate-600 mb-4">
-                      Master the art of budgeting with tips, tricks, and support from fellow budgeters.
-                    </p>
-                    <div className="flex items-center gap-2 text-sm text-slate-500">
-                      <Trophy className="h-4 w-4 text-green-500" />
-                      <span>5 active challenges</span>
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Button className="w-full bg-green-600 hover:bg-green-700">Join Circle</Button>
-                  </CardFooter>
-                </Card>
-
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle>Financial Independence</CardTitle>
-                    <CardDescription>67 members</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-slate-600 mb-4">
-                      Work together towards achieving financial independence and early retirement.
-                    </p>
-                    <div className="flex items-center gap-2 text-sm text-slate-500">
-                      <Trophy className="h-4 w-4 text-orange-500" />
-                      <span>7 active challenges</span>
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Button className="w-full bg-orange-500 hover:bg-orange-600">Join Circle</Button>
-                  </CardFooter>
-                </Card>
+                {discoveredGroups.map((group) => (
+                  <Card key={group.group_id}>
+                    <CardHeader className="pb-2">
+                      <CardTitle>{group.group_name}</CardTitle>
+                      <CardDescription>{group.member_count} members</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-slate-600 mb-4">{group.description}</p>
+                      <div className="rounded-lg bg-slate-100 p-3">
+                        <p className="text-sm font-medium">Progress</p>
+                        <p className="text-xs text-slate-500 mb-2">
+                          ₹{group.total_contribution} of ₹{group.goal_amount}
+                        </p>
+                        <div className="h-2 w-full rounded-full bg-slate-200">
+                          <div 
+                            className={`h-full rounded-full ${
+                              group.goal_complete ? 'bg-green-500' : 'bg-blue-500'
+                            }`}
+                            style={{ width: `${group.progress_percentage}%` }}
+                          ></div>
+                        </div>
+                        <p className="mt-1 text-right text-xs text-slate-500">
+                          {group.progress_percentage}% complete
+                        </p>
+                      </div>
+                    </CardContent>
+                    <CardFooter>
+                      <Button 
+                        className="w-full bg-blue-600 hover:bg-blue-700"
+                        onClick={() => handleJoinGroup(group.group_key || '')}
+                      >
+                        Join Circle
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
               </div>
             </TabsContent>
             <TabsContent value="challenges" className="mt-6">
@@ -396,6 +475,119 @@ export function CommunityPage() {
             </TabsContent>
           </Tabs>
         </div>
+
+        {/* Group Details Dialog */}
+        {selectedGroup && (
+          <Dialog open={!!selectedGroup} onOpenChange={() => setSelectedGroup(null)}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>{selectedGroup.group_name}</DialogTitle>
+                <CardDescription>{selectedGroup.description}</CardDescription>
+              </DialogHeader>
+              <div className="space-y-6">
+                <div className="rounded-lg bg-slate-100 p-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <p className="text-sm font-medium">Progress</p>
+                      <p className="text-xs text-slate-500">
+                        ₹{selectedGroup.total_contribution} of ₹{selectedGroup.goal_amount}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-medium">{selectedGroup.progress_percentage}%</p>
+                      <p className="text-xs text-slate-500">Complete</p>
+                    </div>
+                  </div>
+                  <div className="h-2 w-full rounded-full bg-slate-200">
+                    <div 
+                      className={`h-full rounded-full ${
+                        selectedGroup.goal_complete ? 'bg-green-500' : 'bg-blue-500'
+                      }`}
+                      style={{ width: `${selectedGroup.progress_percentage}%` }}
+                    ></div>
+                  </div>
+                </div>
+
+                {selectedGroup.members && (
+                  <div>
+                    <h3 className="text-sm font-medium mb-2">Members</h3>
+                    <div className="space-y-2">
+                      {selectedGroup.members.map((member) => (
+                        <div key={member.user_id} className="flex items-center justify-between p-2 rounded-lg bg-slate-50">
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-8 w-8">
+                              <AvatarImage src="/placeholder.svg?height=32&width=32" alt={member.username} />
+                              <AvatarFallback>{member.username.slice(0, 2).toUpperCase()}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="text-sm font-medium">{member.username}</p>
+                              <p className="text-xs text-slate-500">Contribution: ₹{member.contribution}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Contribute to Circle</label>
+                    <div className="flex gap-2">
+                      <Input
+                        type="number"
+                        placeholder="Enter amount"
+                        value={contributionAmount}
+                        onChange={(e) => setContributionAmount(e.target.value)}
+                      />
+                      <Button onClick={() => handleContribute(selectedGroup.group_id)}>
+                        Contribute
+                      </Button>
+                    </div>
+                  </div>
+
+                  {selectedGroup.group_key && (
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Group Key</label>
+                      <div className="flex gap-2">
+                        <Input
+                          value={selectedGroup.group_key}
+                          readOnly
+                        />
+                        <Button variant="outline" onClick={() => copyGroupKey(selectedGroup.group_key || '')}>
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                        <Button variant="outline" onClick={() => shareGroup(selectedGroup.group_key || '')}>
+                          <Share2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex gap-2">
+                    {selectedGroup.is_creator ? (
+                      <Button 
+                        variant="destructive" 
+                        className="flex-1"
+                        onClick={() => handleDeleteGroup(selectedGroup.group_id)}
+                      >
+                        Delete Circle
+                      </Button>
+                    ) : (
+                      <Button 
+                        variant="outline" 
+                        className="flex-1"
+                        onClick={() => handleLeaveGroup(selectedGroup.group_id)}
+                      >
+                        Leave Circle
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
       </main>
     </div>
   )

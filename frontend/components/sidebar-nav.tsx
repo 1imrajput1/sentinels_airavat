@@ -57,7 +57,7 @@ export function SidebarNav({ currentPath, isMobile }: SidebarNavProps) {
   ]
 
   const sidebarContent = (
-    <nav className="flex-1 overflow-auto py-4 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-black/20 [&::-webkit-scrollbar-thumb]:bg-[#E65525]/20 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-[#E65525]/40">
+    <nav className="flex-1 overflow-auto py-4 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-black [&::-webkit-scrollbar-thumb]:bg-[#E65525] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-[#E65525]/80 [&::-webkit-scrollbar-thumb:active]:bg-[#E65525]/60">
       {/* Notifications */}
       <div className="px-4 mb-6">
         <div className="flex items-center justify-between p-3.5 bg-black/40 rounded-xl border border-[#E65525]/20 shadow-sm hover:shadow-[0_0_20px_rgba(230,85,37,0.4)] hover:bg-[#E65525] hover:-translate-y-0.5 hover:border-[#E65525] transition-all duration-200 group">

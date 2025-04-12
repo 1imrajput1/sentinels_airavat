@@ -21,12 +21,11 @@ def token_required(f):
             data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=["HS256"])
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT id, role, username FROM Users WHERE username = ?", (data['username'],))
+            cursor.execute("SELECT user_id, username FROM Users WHERE username = ?", (data['username'],))
             user_info = cursor.fetchone()
             if not user_info:
                 return jsonify({'message': 'User not found'}), 404
-            data['id'] = user_info['id']
-            data['role'] = user_info['role']
+            data['user_id'] = user_info['user_id']
             data['username'] = user_info['username']
             request.token_data = data
             # Add the decoded token data to the request context
@@ -34,7 +33,6 @@ def token_required(f):
         except jwt.ExpiredSignatureError:
             return jsonify({'message': 'Token has expired'}), 403
         except jwt.InvalidTokenError:
-            print(token)
             return jsonify({'message': 'Token is invalid'}), 403
         return f(*args, **kwargs)
     return decorated_function
