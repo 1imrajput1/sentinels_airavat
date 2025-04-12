@@ -3,7 +3,6 @@ from functools import wraps
 from flask import Flask, render_template
 from flask_cors import CORS
 from itsdangerous import URLSafeTimedSerializer
-from models.database import db, init_db
 
 # Create Flask app
 app = Flask(__name__)
@@ -15,11 +14,9 @@ app.config['SECRET_KEY'] = SECRET_KEY
 CORS(app, resources={r"/*": {"origins": "*"}})
 s = URLSafeTimedSerializer(SECRET_KEY)
 
-# Initialize SQLAlchemy
-init_db(app)
 
 # Import blueprints after SQLAlchemy initialization
-from apis import create_app
+from api import create_app
 
 @app.route('/')
 @app.route('/home')
