@@ -4,51 +4,11 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { FiUpload, FiTarget, FiTrendingUp, FiBarChart2, FiUsers, FiMessageSquare } from "react-icons/fi";
+import RumiChatbot from "@/components/RumiChatbot";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex-shrink-0">
-              <Image
-                src="https://i.ibb.co/BKBC290s/aarthiq-graphic-logo-withoutbg.png"
-                alt="AARTHIQ Graphic Logo"
-                width={300}
-                height={90}
-                className="h-20 w-auto"
-                priority
-              />
-            </div>
-            <div className="absolute left-1/2 transform -translate-x-1/2">
-              <Image
-                src="https://i.ibb.co/HDJWTL4Q/aarthiq-text-logo-removebg.png"
-                alt="AARTHIQ Text Logo"
-                width={450}
-                height={135}
-                className="h-24 w-auto"
-                priority
-              />
-            </div>
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-center space-x-4">
-                <Link href="/auth/login" className="text-gray-600 hover:text-[#07a6ec] px-3 py-2 rounded-md text-sm font-medium">
-                  Login
-                </Link>
-                <Link
-                  href="/auth/signup"
-                  className="bg-[#07a6ec] text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-[#06a6ec] transition-colors"
-                >
-                  Sign Up
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
@@ -90,29 +50,13 @@ export default function Home() {
                 {/* Finance Graphics */}
                 <div className="absolute top-0 right-0 w-full h-full">
                   <Image
-                    src="https://i.ibb.co/0jZ3YtL/finance-dashboard.png"
+                    src=""
                     alt="Finance Dashboard"
                     width={600}
                     height={400}
                     className="w-full h-auto object-contain"
                   />
                 </div>
-                
-                {/* Rumi AI Companion - Bottom Right Corner */}
-                <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.8, delay: 0.5 }}
-                  className="absolute bottom-0 right-0"
-                >
-                  <Image
-                    src="https://i.ibb.co/LXxjhgkP/rumi1-happy.png"
-                    alt="Rumi AI Companion"
-                    width={150}
-                    height={150}
-                    className="w-32 h-32 object-contain"
-                  />
-                </motion.div>
               </div>
             </motion.div>
           </div>
@@ -405,6 +349,9 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Add RumiChatbot at the bottom of the page */}
+      <RumiChatbot emotion="happy" />
     </main>
   );
 }
