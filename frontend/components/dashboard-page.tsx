@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Bell, Menu, Shield, X, FlameIcon as Fire, BadgeCheck, TrendingUp } from "lucide-react"
+import Image from "next/image"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -55,8 +56,20 @@ export function DashboardPage() {
             <span className="sr-only">Toggle menu</span>
           </Button>
           <div className="flex items-center gap-2 font-semibold text-xl md:hidden">
-            <Shield className="h-6 w-6 text-orange-500" />
-            <span className="bg-gradient-to-r from-orange-500 to-blue-600 bg-clip-text text-transparent">AARTHIQ</span>
+            <Image
+              src="https://i.ibb.co/HLWv0pQk/aarthiq-graphic-logo-withoutbg.png"
+              alt="AARTHIQ Graphic Logo"
+              width={32}
+              height={32}
+              className="h-8 w-8"
+            />
+            <Image
+              src="https://i.ibb.co/WWcGPnM7/aarthiq-text-logo-removebg.png"
+              alt="AARTHIQ Text Logo"
+              width={100}
+              height={32}
+              className="h-8 w-auto"
+            />
           </div>
           <div className="ml-auto flex items-center gap-4">
             <Button variant="ghost" size="icon">
@@ -80,57 +93,8 @@ export function DashboardPage() {
             <p className="text-slate-500">Here's your financial snapshot for today.</p>
           </div>
 
-          {/* Money Mood Meter */}
-          <MoneyMoodMeter />
-
-          {/* Financial Snapshot */}
-          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <FinancialSnapshot />
-            <PredictiveSpending />
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg font-medium">Emergency Fund</CardTitle>
-                <CardDescription>Your financial safety net</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="mb-4">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium">₹75,000 of ₹3,00,000</span>
-                    <span className="text-sm font-medium text-green-600">25%</span>
-                  </div>
-                  <Progress value={25} className="h-2 bg-slate-200" indicatorClassName="bg-green-500" />
-                </div>
-                <p className="text-sm text-slate-500 mb-4">
-                  You're making good progress! Keep adding ₹10,000 monthly to reach your goal by December.
-                </p>
-                <Button variant="outline" className="w-full">
-                  <PiggyBank className="mr-2 h-4 w-4" />
-                  Add Funds
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Tabs for different sections */}
-          <Tabs defaultValue="quick-actions" className="mt-8">
-            <TabsList className="grid w-full grid-cols-3 md:w-auto">
-              <TabsTrigger value="quick-actions">Quick Actions</TabsTrigger>
-              <TabsTrigger value="upcoming-bills">Upcoming Bills</TabsTrigger>
-              <TabsTrigger value="recent-transactions">Recent Transactions</TabsTrigger>
-            </TabsList>
-            <TabsContent value="quick-actions" className="mt-4">
-              <QuickActions />
-            </TabsContent>
-            <TabsContent value="upcoming-bills" className="mt-4">
-              <UpcomingBills />
-            </TabsContent>
-            <TabsContent value="recent-transactions" className="mt-4">
-              <RecentTransactions />
-            </TabsContent>
-          </Tabs>
-
           {/* Achievements */}
-          <div className="mt-8">
+          <div className="mb-8">
             <h2 className="text-xl font-bold mb-4">Recent Achievements</h2>
             <div className="grid gap-4 md:grid-cols-3">
               <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
@@ -180,6 +144,55 @@ export function DashboardPage() {
               </Card>
             </div>
           </div>
+
+          {/* Money Mood Meter */}
+          <MoneyMoodMeter />
+
+          {/* Financial Snapshot */}
+          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <FinancialSnapshot />
+            <PredictiveSpending />
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg font-medium">Emergency Fund</CardTitle>
+                <CardDescription>Your financial safety net</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="mb-4">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-medium">₹75,000 of ₹3,00,000</span>
+                    <span className="text-sm font-medium text-green-600">25%</span>
+                  </div>
+                  <Progress value={25} className="h-2 bg-slate-200" />
+                </div>
+                <p className="text-sm text-slate-500 mb-4">
+                  You're making good progress! Keep adding ₹10,000 monthly to reach your goal by December.
+                </p>
+                <Button variant="outline" className="w-full">
+                  <PiggyBank className="mr-2 h-4 w-4" />
+                  Add Funds
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Tabs for different sections */}
+          <Tabs defaultValue="quick-actions" className="mt-8">
+            <TabsList className="grid w-full grid-cols-3 md:w-auto">
+              <TabsTrigger value="quick-actions">Quick Actions</TabsTrigger>
+              <TabsTrigger value="upcoming-bills">Upcoming Bills</TabsTrigger>
+              <TabsTrigger value="recent-transactions">Recent Transactions</TabsTrigger>
+            </TabsList>
+            <TabsContent value="quick-actions" className="mt-4">
+              <QuickActions />
+            </TabsContent>
+            <TabsContent value="upcoming-bills" className="mt-4">
+              <UpcomingBills />
+            </TabsContent>
+            <TabsContent value="recent-transactions" className="mt-4">
+              <RecentTransactions />
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
     </div>

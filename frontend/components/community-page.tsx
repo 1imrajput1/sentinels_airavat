@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Award, Bell, ChevronRight, Crown, Menu, Search, Shield, Trophy, Users, X } from "lucide-react"
+import Image from "next/image"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -47,8 +48,20 @@ export function CommunityPage() {
             <span className="sr-only">Toggle menu</span>
           </Button>
           <div className="flex items-center gap-2 font-semibold text-xl md:hidden">
-            <Shield className="h-6 w-6 text-orange-500" />
-            <span className="bg-gradient-to-r from-orange-500 to-blue-600 bg-clip-text text-transparent">AARTHIQ</span>
+            <Image
+              src="https://i.ibb.co/HLWv0pQk/aarthiq-graphic-logo-withoutbg.png"
+              alt="AARTHIQ Graphic Logo"
+              width={32}
+              height={32}
+              className="h-8 w-8"
+            />
+            <Image
+              src="https://i.ibb.co/WWcGPnM7/aarthiq-text-logo-removebg.png"
+              alt="AARTHIQ Text Logo"
+              width={100}
+              height={32}
+              className="h-8 w-auto"
+            />
           </div>
           <div className="ml-auto flex items-center gap-4">
             <Button variant="ghost" size="icon">

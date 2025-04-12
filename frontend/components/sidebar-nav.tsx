@@ -2,10 +2,12 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Bell, LayoutDashboard, MessageSquare, Settings, Shield, Trophy, Users, Wallet, LogOut } from "lucide-react"
-
+import { Bell, LayoutDashboard, MessageSquare, Settings, Shield, Trophy, Users, Wallet, LogOut, X } from "lucide-react"
+import Image from "next/image"
+import { Sheet, SheetContent } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+
 import { logout } from "@/utils/auth"
 
 interface SidebarNavProps {
@@ -159,9 +161,21 @@ export function SidebarNav({ currentPath, isMobile }: SidebarNavProps) {
   return (
     <aside className="hidden w-64 flex-col bg-black md:flex">
       <div className="flex h-14 items-center border-b border-[#E65525]/10 px-4">
-        <div className="flex items-center gap-2 font-semibold text-xl text-white">
-          <Shield className="h-6 w-6" />
-          <span>AARTHIQ</span>
+        <div className="flex items-center gap-2">
+          <Image
+            src="https://i.ibb.co/HLWv0pQk/aarthiq-graphic-logo-withoutbg.png"
+            alt="AARTHIQ Graphic Logo"
+            width={32}
+            height={32}
+            className="h-8 w-8"
+          />
+          <Image
+            src="https://i.ibb.co/WWcGPnM7/aarthiq-text-logo-removebg.png"
+            alt="AARTHIQ Text Logo"
+            width={100}
+            height={32}
+            className="h-8 w-auto"
+          />
         </div>
       </div>
       {sidebarContent}
