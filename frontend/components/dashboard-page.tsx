@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Bell, Menu, Shield, X, FlameIcon as Fire, BadgeCheck, TrendingUp } from "lucide-react"
+import { Bell, Menu, Shield, X, FlameIcon as Fire, BadgeCheck, TrendingUp, ShoppingBag, Coffee, Plane, Tv, PiggyBank } from "lucide-react"
 import Image from "next/image"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -18,7 +18,6 @@ import { UpcomingBills } from "@/components/upcoming-bills"
 import { SidebarNav } from "@/components/sidebar-nav"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { PiggyBank } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
 export function DashboardPage() {
@@ -152,26 +151,45 @@ export function DashboardPage() {
           <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             <FinancialSnapshot />
             <PredictiveSpending />
-            <Card>
+            <Card className="overflow-hidden">
               <CardHeader className="pb-2">
-                <CardTitle className="text-lg font-medium">Emergency Fund</CardTitle>
-                <CardDescription>Your financial safety net</CardDescription>
+                <CardTitle className="text-lg font-medium">Spending Categories</CardTitle>
+                <CardDescription>Your top spending areas this month</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="mb-4">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium">₹75,000 of ₹3,00,000</span>
-                    <span className="text-sm font-medium text-green-600">25%</span>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex flex-col items-center">
+                    <div className="group flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-orange-100 to-orange-200 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                      <ShoppingBag className="h-8 w-8 text-orange-500" />
+                    </div>
+                    <p className="mt-2 font-medium text-slate-700">Shopping</p>
+                    <p className="text-sm font-semibold text-orange-600">₹3,500</p>
                   </div>
-                  <Progress value={25} className="h-2 bg-slate-200" />
+                  
+                  <div className="flex flex-col items-center">
+                    <div className="group flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-blue-200 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                      <Coffee className="h-8 w-8 text-blue-500" />
+                    </div>
+                    <p className="mt-2 font-medium text-slate-700">Food</p>
+                    <p className="text-sm font-semibold text-blue-600">₹4,800</p>
+                  </div>
+                  
+                  <div className="flex flex-col items-center">
+                    <div className="group flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-green-100 to-green-200 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                      <Plane className="h-8 w-8 text-green-500" />
+                    </div>
+                    <p className="mt-2 font-medium text-slate-700">Travel</p>
+                    <p className="text-sm font-semibold text-green-600">₹2,200</p>
+                  </div>
+                  
+                  <div className="flex flex-col items-center">
+                    <div className="group flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-purple-100 to-purple-200 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                      <Tv className="h-8 w-8 text-purple-500" />
+                    </div>
+                    <p className="mt-2 font-medium text-slate-700">Subscriptions</p>
+                    <p className="text-sm font-semibold text-purple-600">₹1,500</p>
+                  </div>
                 </div>
-                <p className="text-sm text-slate-500 mb-4">
-                  You're making good progress! Keep adding ₹10,000 monthly to reach your goal by December.
-                </p>
-                <Button variant="outline" className="w-full">
-                  <PiggyBank className="mr-2 h-4 w-4" />
-                  Add Funds
-                </Button>
               </CardContent>
             </Card>
           </div>

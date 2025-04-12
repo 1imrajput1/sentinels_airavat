@@ -161,20 +161,13 @@ export function SidebarNav({ currentPath, isMobile }: SidebarNavProps) {
   return (
     <aside className="hidden w-64 flex-col bg-black md:flex">
       <div className="flex h-14 items-center border-b border-[#E65525]/10 px-4">
-        <div className="flex items-center gap-2">
-          <Image
-            src="https://i.ibb.co/HLWv0pQk/aarthiq-graphic-logo-withoutbg.png"
-            alt="AARTHIQ Graphic Logo"
-            width={32}
-            height={32}
-            className="h-8 w-8"
-          />
+        <div className="flex items-center justify-center w-full">
           <Image
             src="https://i.ibb.co/WWcGPnM7/aarthiq-text-logo-removebg.png"
             alt="AARTHIQ Text Logo"
-            width={100}
-            height={32}
-            className="h-8 w-auto"
+            width={150}
+            height={48}
+            className="h-12 w-auto"
           />
         </div>
       </div>
