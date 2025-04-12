@@ -7,7 +7,11 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiUpload, FiTarget, FiTrendingUp, FiBarChart2, FiUsers, FiMessageSquare } from "react-icons/fi";
 import { isAuthenticated, getUserData } from "@/utils/auth";
-import RumiChatbot from "@/components/RumiChatbot";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -389,9 +393,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-
-      {/* Add RumiChatbot */}
-      <RumiChatbot emotion="happy" />
     </main>
   );
 }

@@ -3,6 +3,7 @@
 import { Navigation } from '@/components/navigation'
 import { SidebarNav } from '@/components/sidebar-nav'
 import { usePathname } from 'next/navigation'
+import AuthenticatedChatbot from '@/components/AuthenticatedChatbot'
 
 export function LayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -24,6 +25,7 @@ export function LayoutContent({ children }: { children: React.ReactNode }) {
           <main className="flex-1 overflow-y-auto">
             {children}
           </main>
+          <AuthenticatedChatbot />
         </>
       )}
     </body>

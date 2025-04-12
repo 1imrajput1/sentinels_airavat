@@ -38,29 +38,15 @@ export function Navigation() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/20 backdrop-blur-md border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          {/* Graphic Logo - Top Left */}
+          {/* Text Logo - Top Left */}
           <div className="flex-shrink-0">
-            <Link href="/">
-              <Image
-                src="https://i.ibb.co/HLWv0pQk/aarthiq-graphic-logo-withoutbg.png"
-                alt="AARTHIQ Graphic Logo"
-                width={300}
-                height={90}
-                className="h-20 w-auto"
-                priority
-              />
-            </Link>
-          </div>
-
-          {/* Text Logo - Top Center */}
-          <div className="absolute left-1/2 transform -translate-x-1/2">
             <Link href="/">
               <Image
                 src="https://i.ibb.co/WWcGPnM7/aarthiq-text-logo-removebg.png"
                 alt="AARTHIQ Text Logo"
-                width={400}
-                height={120}
-                className="h-20 w-auto"
+                width={100}
+                height={32}
+                className="h-8 w-auto"
                 priority
               />
             </Link>
