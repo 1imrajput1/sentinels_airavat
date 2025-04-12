@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiUpload, FiTarget, FiTrendingUp, FiBarChart2, FiUsers, FiMessageSquare } from "react-icons/fi";
 import { isAuthenticated, getUserData } from "@/utils/auth";
+import RumiChatbot from "@/components/RumiChatbot";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -34,8 +35,18 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <section className="relative min-h-screen">
+        <div className="absolute inset-0 -top-16">
+          <Image
+            src="/landing-bg1.png"
+            alt="Hero Background"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/60" />
+        </div>
+        <div className="max-w-7xl mx-auto relative z-10 pt-32 pb-20 px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Column - Text Content */}
             <motion.div
@@ -43,11 +54,11 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h1 className="text-5xl font-bold text-gray-900 mb-6">
+              <h1 className="text-5xl font-bold text-white mb-6">
                 Your Money?{" "}
                 <span className="text-[#07a6ec]">Understood.</span>
               </h1>
-              <p className="text-xl text-gray-600 mb-8">
+              <p className="text-xl text-white mb-8">
                 An AI-powered personal finance platform that helps you track, save, and grow your money with goals, rewards, and challenges.
               </p>
               {!isLoggedIn && (
@@ -76,8 +87,8 @@ export default function Home() {
                 {/* Finance Graphics */}
                 <div className="absolute top-0 right-0 w-full h-full">
                   <Image
-                    src="https://i.ibb.co/0jZ3YtL/finance-dashboard.png"
-                    alt="Finance Dashboard"
+                    src=""
+                    alt="Finance Dashboard - to be added"
                     width={600}
                     height={400}
                     className="w-full h-auto object-contain"
@@ -85,20 +96,7 @@ export default function Home() {
                 </div>
                 
                 {/* Rumi AI Companion - Bottom Right Corner */}
-                <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.8, delay: 0.5 }}
-                  className="absolute bottom-0 right-0"
-                >
-                  <Image
-                    src="https://i.ibb.co/LXxjhgkP/rumi1-happy.png"
-                    alt="Rumi AI Companion"
-                    width={150}
-                    height={150}
-                    className="w-32 h-32 object-contain"
-                  />
-                </motion.div>
+                
               </div>
             </motion.div>
           </div>
@@ -391,6 +389,9 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Add RumiChatbot */}
+      <RumiChatbot emotion="happy" />
     </main>
   );
 }
