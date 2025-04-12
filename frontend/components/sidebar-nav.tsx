@@ -16,7 +16,7 @@ export function SidebarNav({ currentPath, isMobile }: SidebarNavProps) {
     {
       title: "Dashboard",
       icon: LayoutDashboard,
-      href: "/",
+      href: "/dashboard",
     },
     {
       title: "Transactions",
