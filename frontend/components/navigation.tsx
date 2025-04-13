@@ -75,6 +75,12 @@ export function Navigation() {
               </>
             ) : (
               <>
+                <Link
+                  href="/rewards"
+                  className="bg-[#E65525] text-white hover:bg-[#E65525]/90 px-4 py-2 rounded-md text-sm font-medium"
+                >
+                  Claim Rewards
+                </Link>
                 <span className="text-gray-600 px-4 py-2 text-sm font-medium">
                   Welcome, {userData?.name || 'User'}
                 </span>

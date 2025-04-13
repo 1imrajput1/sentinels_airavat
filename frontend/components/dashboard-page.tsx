@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Bell, Menu, Shield, X, FlameIcon as Fire, BadgeCheck, TrendingUp, ShoppingBag, Coffee, Plane, Tv, PiggyBank } from "lucide-react"
+import { Bell, Menu, Shield, X, FlameIcon as Fire, BadgeCheck, TrendingUp, ShoppingBag, Coffee, Plane, Tv, PiggyBank, Sun, Moon } from "lucide-react"
 import Image from "next/image"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -22,9 +22,15 @@ import { Badge } from "@/components/ui/badge"
 
 export function DashboardPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(false)
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode)
+    document.documentElement.classList.toggle('dark')
+  }
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-900">
       {/* Sidebar for desktop
       <SidebarNav currentPath="/" isMobile={false} />
 
@@ -49,7 +55,7 @@ export function DashboardPage() {
       {/* Main content */}
       <main className="flex-1 overflow-auto">
         {/* Header */}
-        <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-white px-4 sm:px-6">
+        <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-white dark:bg-slate-800 px-4 sm:px-6">
           <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsSidebarOpen(true)}>
             <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle menu</span>
@@ -71,6 +77,14 @@ export function DashboardPage() {
             />
           </div>
           <div className="ml-auto flex items-center gap-4">
+            <Button variant="ghost" size="icon" onClick={toggleTheme}>
+              {isDarkMode ? (
+                <Sun className="h-5 w-5 text-yellow-500" />
+              ) : (
+                <Moon className="h-5 w-5 text-slate-600" />
+              )}
+              <span className="sr-only">Toggle theme</span>
+            </Button>
             <Button variant="ghost" size="icon">
               <Bell className="h-5 w-5" />
               <span className="sr-only">Notifications</span>
@@ -160,7 +174,7 @@ export function DashboardPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col items-center">
                     <div className="group flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-orange-100 to-orange-200 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                      <ShoppingBag className="h-8 w-8 text-orange-500" />
+                      <img src="/shopping.png" alt="Shopping" className="h-12 w-12" />
                     </div>
                     <p className="mt-2 font-medium text-slate-700">Shopping</p>
                     <p className="text-sm font-semibold text-orange-600">₹3,500</p>
@@ -168,7 +182,7 @@ export function DashboardPage() {
                   
                   <div className="flex flex-col items-center">
                     <div className="group flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-blue-200 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                      <Coffee className="h-8 w-8 text-blue-500" />
+                      <img src="/food.png" alt="Food" className="h-12 w-12" />
                     </div>
                     <p className="mt-2 font-medium text-slate-700">Food</p>
                     <p className="text-sm font-semibold text-blue-600">₹4,800</p>
@@ -176,7 +190,7 @@ export function DashboardPage() {
                   
                   <div className="flex flex-col items-center">
                     <div className="group flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-green-100 to-green-200 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                      <Plane className="h-8 w-8 text-green-500" />
+                      <img src="/travel.png" alt="Travel" className="h-12 w-12" />
                     </div>
                     <p className="mt-2 font-medium text-slate-700">Travel</p>
                     <p className="text-sm font-semibold text-green-600">₹2,200</p>
@@ -184,7 +198,7 @@ export function DashboardPage() {
                   
                   <div className="flex flex-col items-center">
                     <div className="group flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-purple-100 to-purple-200 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                      <Tv className="h-8 w-8 text-purple-500" />
+                      <img src="/netflix.png" alt="Netflix" className="h-12 w-12" />
                     </div>
                     <p className="mt-2 font-medium text-slate-700">Subscriptions</p>
                     <p className="text-sm font-semibold text-purple-600">₹1,500</p>

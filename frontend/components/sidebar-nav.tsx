@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Bell, LayoutDashboard, MessageSquare, Settings, Shield, Trophy, Users, Wallet, LogOut, X } from "lucide-react"
+import { Bell, LayoutDashboard, MessageSquare, Settings, Shield, Trophy, Users, Wallet, LogOut, X, Gift } from "lucide-react"
 import Image from "next/image"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
@@ -45,6 +45,11 @@ export function SidebarNav({ currentPath, isMobile }: SidebarNavProps) {
       href: "/community",
     },
     {
+      title: "Claim Rewards",
+      icon: Gift,
+      href: "/rewards",
+    },
+    {
       title: "Insights & Coach",
       icon: MessageSquare,
       href: "/insights",
@@ -74,7 +79,7 @@ export function SidebarNav({ currentPath, isMobile }: SidebarNavProps) {
         <div className="px-4">
           <h2 className="mb-3 px-2 text-sm font-medium tracking-tight text-white/80 uppercase">Manage</h2>
           <div className="space-y-1.5">
-            {navItems.slice(0, 4).map((item) => (
+            {navItems.slice(0, 5).map((item) => (
               <Button
                 key={item.href}
                 variant="ghost"
@@ -98,7 +103,7 @@ export function SidebarNav({ currentPath, isMobile }: SidebarNavProps) {
         <div className="px-4">
           <h2 className="mb-3 px-2 text-sm font-medium tracking-tight text-white/80 uppercase">Support</h2>
           <div className="space-y-1.5">
-            {navItems.slice(4).map((item) => (
+            {navItems.slice(5).map((item) => (
               <Button
                 key={item.href}
                 variant="ghost"
