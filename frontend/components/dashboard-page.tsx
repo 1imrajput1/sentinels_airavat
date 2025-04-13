@@ -1,13 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { Bell, Menu, Shield, X, FlameIcon as Fire, BadgeCheck, TrendingUp, ShoppingBag, Coffee, Plane, Tv, PiggyBank, Sun, Moon } from "lucide-react"
+import { Bell, Menu, Shield, X, FlameIcon as Fire, BadgeCheck, TrendingUp, ShoppingBag, Coffee, Plane, Tv, PiggyBank, Sun, Moon, AlertTriangle, HelpCircle } from "lucide-react"
 import Image from "next/image"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 import { FinancialSnapshot } from "@/components/financial-snapshot"
 import { MoneyMoodMeter } from "@/components/money-mood-meter"
@@ -23,11 +24,39 @@ import { Badge } from "@/components/ui/badge"
 export function DashboardPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false)
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode)
     document.documentElement.classList.toggle('dark')
   }
+
+  const notifications = [
+    {
+      id: 1,
+      type: 'alert',
+      icon: AlertTriangle,
+      title: 'Unusual Spending Alert',
+      message: '₹2999 spent — unusually high',
+      time: '2 minutes ago',
+      color: 'text-orange-500',
+      bgColor: 'bg-orange-50',
+      borderColor: 'border-orange-200',
+      iconBg: 'bg-orange-100'
+    },
+    {
+      id: 2,
+      type: 'help',
+      icon: HelpCircle,
+      title: 'Parent Assistance Request',
+      message: 'Help alert! Your parent requested assistance.',
+      time: '5 minutes ago',
+      color: 'text-blue-500',
+      bgColor: 'bg-blue-50',
+      borderColor: 'border-blue-200',
+      iconBg: 'bg-blue-100'
+    }
+  ]
 
   return (
     <div className="flex min-h-screen bg-slate-50 dark:bg-slate-900">
@@ -85,13 +114,49 @@ export function DashboardPage() {
               )}
               <span className="sr-only">Toggle theme</span>
             </Button>
-            <Button variant="ghost" size="icon">
-              <Bell className="h-5 w-5" />
-              <span className="sr-only">Notifications</span>
-              <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-orange-500 text-[10px] font-medium text-white">
-                3
-              </span>
-            </Button>
+            <Popover open={isNotificationsOpen} onOpenChange={setIsNotificationsOpen}>
+              <PopoverTrigger asChild>
+                <Button variant="ghost" size="icon" className="relative">
+                  <Bell className="h-5 w-5" />
+                  <span className="sr-only">Notifications</span>
+                  <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-orange-500 text-[10px] font-medium text-white">
+                    {notifications.length}
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80 p-0" align="end">
+                <div className="flex items-center justify-between border-b px-4 py-3 bg-gray-50 dark:bg-gray-800">
+                  <h3 className="font-semibold">Notifications</h3>
+                  <Button variant="ghost" size="sm" className="text-xs text-gray-500 hover:text-gray-900 dark:hover:text-gray-100">
+                    Mark all as read
+                  </Button>
+                </div>
+                <div className="max-h-[300px] overflow-y-auto">
+                  {notifications.map((notification) => {
+                    const Icon = notification.icon
+                    return (
+                      <div
+                        key={notification.id}
+                        className={`flex items-start gap-3 p-4 border-b ${notification.bgColor} ${notification.borderColor} hover:bg-opacity-80 transition-colors duration-200`}
+                      >
+                        <div className={`mt-1 rounded-full p-2 ${notification.iconBg} ${notification.color}`}>
+                          <Icon className="h-4 w-4" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between">
+                            <h4 className={`font-medium ${notification.color}`}>{notification.title}</h4>
+                            <span className="text-xs text-gray-500">{notification.time}</span>
+                          </div>
+                          <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">
+                            {notification.message}
+                          </p>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </PopoverContent>
+            </Popover>
             <Avatar className="h-8 w-8 md:hidden">
               <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
               <AvatarFallback>RA</AvatarFallback>
