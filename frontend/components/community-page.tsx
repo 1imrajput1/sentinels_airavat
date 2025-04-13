@@ -185,8 +185,8 @@ export function CommunityPage() {
         <SheetContent side="left" className="w-64 p-0">
           <div className="flex h-14 items-center border-b px-4">
             <div className="flex items-center gap-2 font-semibold text-xl">
-              <Shield className="h-6 w-6 text-orange-500" />
-              <span className="bg-gradient-to-r from-orange-500 to-blue-600 bg-clip-text text-transparent">
+              <Shield className="h-6 w-6 text-[#fa6724]" />
+              <span className="bg-gradient-to-r from-[#fa6724] to-[#07a6ec] bg-clip-text text-transparent">
                 AARTHIQ
               </span>
             </div>
@@ -226,7 +226,7 @@ export function CommunityPage() {
             <Button variant="ghost" size="icon">
               <Bell className="h-5 w-5" />
               <span className="sr-only">Notifications</span>
-              <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-orange-500 text-[10px] font-medium text-white">
+              <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#fa6724] text-[10px] font-medium text-white">
                 3
               </span>
             </Button>
@@ -240,17 +240,17 @@ export function CommunityPage() {
         {/* Community content */}
         <div className="p-4 sm:p-6 lg:p-8">
           <div className="mb-8">
-            <h1 className="text-2xl font-bold tracking-tight">Community Center</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-[#07a6ec]">Community Center</h1>
             <p className="text-slate-500">Connect with others on your financial journey</p>
           </div>
 
           {/* Search and join */}
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#07a6ec]" />
               <Input 
                 placeholder="Search financial circles..." 
-                className="pl-9"
+                className="pl-9 border-[#07a6ec]/30 focus:border-[#07a6ec] focus:ring-[#07a6ec]"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -259,14 +259,20 @@ export function CommunityPage() {
             <div className="flex gap-2">
               <Dialog open={isJoiningGroup} onOpenChange={setIsJoiningGroup}>
                 <DialogTrigger asChild>
-                  <Button variant="outline">
-                    <Users className="mr-2 h-4 w-4" />
+                  <Button variant="outline" className="border-[#fa6724] text-[#fa6724] hover:bg-[#fa6724] hover:text-white">
+                    <Image 
+                      src="/icons-community/IMG-20250413-WA0001.jpg" 
+                      alt="Join" 
+                      width={16} 
+                      height={16} 
+                      className="mr-2 rounded-full"
+                    />
                     Join Circle
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Join a Financial Circle</DialogTitle>
+                    <DialogTitle className="text-[#07a6ec]">Join a Financial Circle</DialogTitle>
                     <CardDescription>Enter the group key to join a circle</CardDescription>
                   </DialogHeader>
                   <div className="space-y-4 py-4">
@@ -276,9 +282,13 @@ export function CommunityPage() {
                         placeholder="Enter group key"
                         value={joinGroupKey}
                         onChange={(e) => setJoinGroupKey(e.target.value)}
+                        className="border-[#07a6ec]/30 focus:border-[#07a6ec] focus:ring-[#07a6ec]"
                       />
                     </div>
-                    <Button className="w-full" onClick={() => handleJoinGroup(joinGroupKey)}>
+                    <Button 
+                      className="w-full bg-[#fa6724] hover:bg-[#fa6724]/90" 
+                      onClick={() => handleJoinGroup(joinGroupKey)}
+                    >
                       Join Circle
                     </Button>
                   </div>
@@ -287,14 +297,20 @@ export function CommunityPage() {
 
               <Dialog open={isCreatingGroup} onOpenChange={setIsCreatingGroup}>
                 <DialogTrigger asChild>
-                  <Button className="bg-blue-600 hover:bg-blue-700">
-                    <Users className="mr-2 h-4 w-4" />
+                  <Button className="bg-[#07a6ec] hover:bg-[#07a6ec]/90">
+                    <Image 
+                      src="/icons-community/IMG-20250413-WA0002.jpg" 
+                      alt="Create" 
+                      width={16} 
+                      height={16} 
+                      className="mr-2 rounded-full"
+                    />
                     Create New Circle
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Create New Financial Circle</DialogTitle>
+                    <DialogTitle className="text-[#07a6ec]">Create New Financial Circle</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-4 py-4">
                     <div className="space-y-2">
@@ -303,6 +319,7 @@ export function CommunityPage() {
                         placeholder="Enter circle name"
                         value={newGroupData.group_name}
                         onChange={(e) => setNewGroupData({...newGroupData, group_name: e.target.value})}
+                        className="border-[#07a6ec]/30 focus:border-[#07a6ec] focus:ring-[#07a6ec]"
                       />
                     </div>
                     <div className="space-y-2">
@@ -311,6 +328,7 @@ export function CommunityPage() {
                         placeholder="Enter description"
                         value={newGroupData.description}
                         onChange={(e) => setNewGroupData({...newGroupData, description: e.target.value})}
+                        className="border-[#07a6ec]/30 focus:border-[#07a6ec] focus:ring-[#07a6ec]"
                       />
                     </div>
                     <div className="space-y-2">
@@ -320,9 +338,13 @@ export function CommunityPage() {
                         placeholder="Enter goal amount"
                         value={newGroupData.goal_amount}
                         onChange={(e) => setNewGroupData({...newGroupData, goal_amount: Number(e.target.value)})}
+                        className="border-[#07a6ec]/30 focus:border-[#07a6ec] focus:ring-[#07a6ec]"
                       />
                     </div>
-                    <Button className="w-full" onClick={handleCreateGroup}>
+                    <Button 
+                      className="w-full bg-[#07a6ec] hover:bg-[#07a6ec]/90" 
+                      onClick={handleCreateGroup}
+                    >
                       Create Circle
                     </Button>
                   </div>
@@ -334,16 +356,25 @@ export function CommunityPage() {
           {/* Financial Circles */}
           <Tabs defaultValue="my-circles" className="mt-8">
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="my-circles">My Circles</TabsTrigger>
-              <TabsTrigger value="discover">Discover</TabsTrigger>
-              <TabsTrigger value="challenges">Community Challenges</TabsTrigger>
+              <TabsTrigger value="my-circles" className="data-[state=active]:bg-[#07a6ec] data-[state=active]:text-white">My Circles</TabsTrigger>
+              <TabsTrigger value="discover" className="data-[state=active]:bg-[#fa6724] data-[state=active]:text-white">Discover</TabsTrigger>
+              <TabsTrigger value="challenges" className="data-[state=active]:bg-[#e30584] data-[state=active]:text-white">Community Challenges</TabsTrigger>
             </TabsList>
             <TabsContent value="my-circles" className="mt-6">
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {myGroups.map((group) => (
-                  <Card key={group.group_id}>
+                  <Card key={group.group_id} className="border-[#07a6ec]/20 hover:border-[#07a6ec]/50 transition-all duration-200">
                     <CardHeader className="pb-2">
-                      <CardTitle>{group.group_name}</CardTitle>
+                      <div className="flex items-center gap-2">
+                        <Image 
+                          src="/icons-community/IMG-20250413-WA0003.jpg" 
+                          alt="Group" 
+                          width={24} 
+                          height={24} 
+                          className="rounded-full"
+                        />
+                        <CardTitle className="text-[#07a6ec]">{group.group_name}</CardTitle>
+                      </div>
                       <CardDescription>{group.member_count} members</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -356,7 +387,7 @@ export function CommunityPage() {
                         <div className="h-2 w-full rounded-full bg-slate-200">
                           <div 
                             className={`h-full rounded-full ${
-                              group.goal_complete ? 'bg-green-500' : 'bg-blue-500'
+                              group.goal_complete ? 'bg-green-500' : 'bg-[#07a6ec]'
                             }`}
                             style={{ width: `${group.progress_percentage}%` }}
                           ></div>
@@ -369,7 +400,7 @@ export function CommunityPage() {
                     <CardFooter className="flex flex-col gap-2">
                       <Button 
                         variant="outline" 
-                        className="w-full"
+                        className="w-full border-[#07a6ec] text-[#07a6ec] hover:bg-[#07a6ec] hover:text-white"
                         onClick={() => handleViewDetails(group)}
                       >
                         View Details
@@ -378,16 +409,26 @@ export function CommunityPage() {
                     </CardFooter>
                   </Card>
                 ))}
-                <Card className="border-dashed border-slate-300 bg-slate-50">
+                <Card className="border-dashed border-[#07a6ec]/30 bg-slate-50 hover:border-[#07a6ec]/50 transition-all duration-200">
                   <CardContent className="flex flex-col items-center justify-center p-6">
-                    <div className="mb-4 rounded-full bg-slate-100 p-3">
-                      <Users className="h-6 w-6 text-slate-400" />
+                    <div className="mb-4 rounded-full bg-[#07a6ec]/10 p-3">
+                      <Image 
+                        src="/icons-community/IMG-20250413-WA0004.jpg" 
+                        alt="Join More" 
+                        width={24} 
+                        height={24} 
+                        className="rounded-full"
+                      />
                     </div>
-                    <h3 className="mb-1 text-lg font-medium">Join More Circles</h3>
+                    <h3 className="mb-1 text-lg font-medium text-[#07a6ec]">Join More Circles</h3>
                     <p className="mb-4 text-center text-sm text-slate-500">
                       Connect with others who share your financial goals
                     </p>
-                    <Button variant="outline" onClick={() => document.getElementById('discover-tab')?.click()}>
+                    <Button 
+                      variant="outline" 
+                      className="border-[#07a6ec] text-[#07a6ec] hover:bg-[#07a6ec] hover:text-white"
+                      onClick={() => document.getElementById('discover-tab')?.click()}
+                    >
                       Browse Circles
                     </Button>
                   </CardContent>
@@ -397,9 +438,18 @@ export function CommunityPage() {
             <TabsContent value="discover" className="mt-6">
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {discoveredGroups.map((group) => (
-                  <Card key={group.group_id}>
+                  <Card key={group.group_id} className="border-[#fa6724]/20 hover:border-[#fa6724]/50 transition-all duration-200">
                     <CardHeader className="pb-2">
-                      <CardTitle>{group.group_name}</CardTitle>
+                      <div className="flex items-center gap-2">
+                        <Image 
+                          src="/icons-community/IMG-20250413-WA0005.jpg" 
+                          alt="Group" 
+                          width={24} 
+                          height={24} 
+                          className="rounded-full"
+                        />
+                        <CardTitle className="text-[#fa6724]">{group.group_name}</CardTitle>
+                      </div>
                       <CardDescription>{group.member_count} members</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -412,7 +462,7 @@ export function CommunityPage() {
                         <div className="h-2 w-full rounded-full bg-slate-200">
                           <div 
                             className={`h-full rounded-full ${
-                              group.goal_complete ? 'bg-green-500' : 'bg-blue-500'
+                              group.goal_complete ? 'bg-green-500' : 'bg-[#fa6724]'
                             }`}
                             style={{ width: `${group.progress_percentage}%` }}
                           ></div>
@@ -424,7 +474,7 @@ export function CommunityPage() {
                     </CardContent>
                     <CardFooter>
                       <Button 
-                        className="w-full bg-blue-600 hover:bg-blue-700"
+                        className="w-full bg-[#fa6724] hover:bg-[#fa6724]/90"
                         onClick={() => handleJoinGroup(group.group_key || '')}
                       >
                         Join Circle
@@ -435,38 +485,47 @@ export function CommunityPage() {
               </div>
             </TabsContent>
             <TabsContent value="challenges" className="mt-6">
-              <Card>
+              <Card className="border-[#e30584]/20">
                 <CardHeader className="pb-2">
-                  <CardTitle>Community Challenges</CardTitle>
+                  <div className="flex items-center gap-2">
+                    <Image 
+                      src="/icons-community/IMG-20250413-WA0001.jpg" 
+                      alt="Challenges" 
+                      width={24} 
+                      height={24} 
+                      className="rounded-full"
+                    />
+                    <CardTitle className="text-[#e30584]">Community Challenges</CardTitle>
+                  </div>
                   <CardDescription>Join forces with others to achieve financial goals</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="rounded-lg border p-4">
+                    <div className="rounded-lg border border-[#07a6ec]/30 p-4 hover:border-[#07a6ec]/50 transition-all duration-200">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="font-medium">No-Spend Weekend</h3>
+                          <h3 className="font-medium text-[#07a6ec]">No-Spend Weekend</h3>
                           <p className="text-sm text-slate-500">Avoid all non-essential spending this weekend</p>
                         </div>
-                        <Button size="sm">Join (1,245 participants)</Button>
+                        <Button size="sm" className="bg-[#07a6ec] hover:bg-[#07a6ec]/90">Join (1,245 participants)</Button>
                       </div>
                     </div>
-                    <div className="rounded-lg border p-4">
+                    <div className="rounded-lg border border-[#fa6724]/30 p-4 hover:border-[#fa6724]/50 transition-all duration-200">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="font-medium">Million Rupee Challenge</h3>
+                          <h3 className="font-medium text-[#fa6724]">Million Rupee Challenge</h3>
                           <p className="text-sm text-slate-500">Collectively save ₹1,000,000 in 30 days</p>
                         </div>
-                        <Button size="sm">Join (876 participants)</Button>
+                        <Button size="sm" className="bg-[#fa6724] hover:bg-[#fa6724]/90">Join (876 participants)</Button>
                       </div>
                     </div>
-                    <div className="rounded-lg border p-4">
+                    <div className="rounded-lg border border-[#e30584]/30 p-4 hover:border-[#e30584]/50 transition-all duration-200">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="font-medium">Debt Reduction Rally</h3>
+                          <h3 className="font-medium text-[#e30584]">Debt Reduction Rally</h3>
                           <p className="text-sm text-slate-500">Reduce your debt by at least 3% this month</p>
                         </div>
-                        <Button size="sm">Join (542 participants)</Button>
+                        <Button size="sm" className="bg-[#e30584] hover:bg-[#e30584]/90">Join (542 participants)</Button>
                       </div>
                     </div>
                   </div>
@@ -481,7 +540,7 @@ export function CommunityPage() {
           <Dialog open={!!selectedGroup} onOpenChange={() => setSelectedGroup(null)}>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
-                <DialogTitle>{selectedGroup.group_name}</DialogTitle>
+                <DialogTitle className="text-[#07a6ec]">{selectedGroup.group_name}</DialogTitle>
                 <CardDescription>{selectedGroup.description}</CardDescription>
               </DialogHeader>
               <div className="space-y-6">
@@ -501,7 +560,7 @@ export function CommunityPage() {
                   <div className="h-2 w-full rounded-full bg-slate-200">
                     <div 
                       className={`h-full rounded-full ${
-                        selectedGroup.goal_complete ? 'bg-green-500' : 'bg-blue-500'
+                        selectedGroup.goal_complete ? 'bg-green-500' : 'bg-[#07a6ec]'
                       }`}
                       style={{ width: `${selectedGroup.progress_percentage}%` }}
                     ></div>
@@ -539,8 +598,12 @@ export function CommunityPage() {
                         placeholder="Enter amount"
                         value={contributionAmount}
                         onChange={(e) => setContributionAmount(e.target.value)}
+                        className="border-[#07a6ec]/30 focus:border-[#07a6ec] focus:ring-[#07a6ec]"
                       />
-                      <Button onClick={() => handleContribute(selectedGroup.group_id)}>
+                      <Button 
+                        onClick={() => handleContribute(selectedGroup.group_id)}
+                        className="bg-[#07a6ec] hover:bg-[#07a6ec]/90"
+                      >
                         Contribute
                       </Button>
                     </div>
@@ -553,11 +616,20 @@ export function CommunityPage() {
                         <Input
                           value={selectedGroup.group_key}
                           readOnly
+                          className="border-[#07a6ec]/30 focus:border-[#07a6ec] focus:ring-[#07a6ec]"
                         />
-                        <Button variant="outline" onClick={() => copyGroupKey(selectedGroup.group_key || '')}>
+                        <Button 
+                          variant="outline" 
+                          onClick={() => copyGroupKey(selectedGroup.group_key || '')}
+                          className="border-[#07a6ec] text-[#07a6ec] hover:bg-[#07a6ec] hover:text-white"
+                        >
                           <Copy className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" onClick={() => shareGroup(selectedGroup.group_key || '')}>
+                        <Button 
+                          variant="outline" 
+                          onClick={() => shareGroup(selectedGroup.group_key || '')}
+                          className="border-[#07a6ec] text-[#07a6ec] hover:bg-[#07a6ec] hover:text-white"
+                        >
                           <Share2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -568,7 +640,7 @@ export function CommunityPage() {
                     {selectedGroup.is_creator ? (
                       <Button 
                         variant="destructive" 
-                        className="flex-1"
+                        className="flex-1 bg-red-500 hover:bg-red-600"
                         onClick={() => handleDeleteGroup(selectedGroup.group_id)}
                       >
                         Delete Circle
@@ -576,7 +648,7 @@ export function CommunityPage() {
                     ) : (
                       <Button 
                         variant="outline" 
-                        className="flex-1"
+                        className="flex-1 border-[#fa6724] text-[#fa6724] hover:bg-[#fa6724] hover:text-white"
                         onClick={() => handleLeaveGroup(selectedGroup.group_id)}
                       >
                         Leave Circle
