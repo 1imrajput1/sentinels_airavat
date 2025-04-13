@@ -6,6 +6,7 @@ from itsdangerous import URLSafeTimedSerializer
 
 # Create Flask app
 app = Flask(__name__)
+app.config['GEMINI_API_KEY'] = 'AIzaSyBvIEb59ECl1PDVBShPGWKsteBODB2usfE'
 
 # Configure app
 SECRET_KEY = 'SUPER_SECRET_KEY'
