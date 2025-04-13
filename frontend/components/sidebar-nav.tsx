@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Bell, LayoutDashboard, MessageSquare, Settings, Shield, Trophy, Users, Wallet, LogOut, X, Gift } from "lucide-react"
+import { Bell, LayoutDashboard, MessageSquare, Settings, Shield, Trophy, Users, Wallet, LogOut, X, Gift, Brain } from "lucide-react"
 import Image from "next/image"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
@@ -49,6 +49,12 @@ export function SidebarNav({ currentPath, isMobile }: SidebarNavProps) {
       icon: Gift,
       href: "/rewards",
     },
+    {
+      title: "Suggestions",
+      icon: Brain,
+      href: "/suggestions",
+    },
+  
     {
       title: "Insights & Coach",
       icon: MessageSquare,

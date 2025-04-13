@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LayoutContent } from '@/components/layout-content'
+import { ThemeProvider } from '@/components/theme-provider'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -13,10 +14,19 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <LayoutContent>
-        {children}
-      </LayoutContent>
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <LayoutContent>
+            {children}
+          </LayoutContent>
+        </ThemeProvider>
+      </body>
     </html>
   )
 }
